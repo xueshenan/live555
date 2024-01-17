@@ -1339,12 +1339,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 						0, False);
 	fReadSource = MPEG2TransportStreamFramer::createNew(env(), fRTPSource);
 	// this sets "durationInMicroseconds" correctly, based on the PCR values
-      } else if (strcmp(fCodecName, "H263-1998") == 0 ||
-		 strcmp(fCodecName, "H263-2000") == 0) { // H.263+
-	fReadSource = fRTPSource
-	  = H263plusVideoRTPSource::createNew(env(), fRTPSocket,
-					      fRTPPayloadFormat,
-					      fRTPTimestampFrequency);
       } else if (strcmp(fCodecName, "H264") == 0) {
 	fReadSource = fRTPSource
 	  = H264VideoRTPSource::createNew(env(), fRTPSocket,
@@ -1357,18 +1351,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 					  fRTPPayloadFormat,
 					  expectDONFields,
 					  fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "X-QT") == 0 || strcmp(fCodecName, "X-QUICKTIME") == 0) {
-	// Generic QuickTime streams, as defined in
-	// <http://developer.apple.com/quicktime/icefloe/dispatch026.html>
-	char* mimeType
-	  = new char[strlen(mediumName()) + strlen(codecName()) + 2] ;
-	sprintf(mimeType, "%s/%s", mediumName(), codecName());
-	fReadSource = fRTPSource
-	  = QuickTimeGenericRTPSource::createNew(env(), fRTPSocket,
-						 fRTPPayloadFormat,
-						 fRTPTimestampFrequency,
-						 mimeType);
-	delete[] mimeType;
       } else if (  strcmp(fCodecName, "PCMU") == 0 // PCM u-law audio
 		   || strcmp(fCodecName, "GSM") == 0 // GSM audio
 		   || strcmp(fCodecName, "DVI4") == 0 // DVI4 (IMA ADPCM) audio
