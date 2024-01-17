@@ -23,10 +23,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 
 #ifndef _LIVEMEDIA_HH
 #define _LIVEMEDIA_HH
-#include "JPEG2000VideoRTPSource.hh"
-#include "JPEG2000VideoRTPSink.hh"
-//#include "JPEG2000VideoStreamFramer.hh"
-//#include "JPEG2000VideoFileServerMediaSubsession.hh"
 #include "MPEG1or2AudioRTPSink.hh"
 #include "MP3ADURTPSink.hh"
 #include "MPEG1or2VideoRTPSink.hh"
@@ -47,7 +43,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "H265VideoStreamFramer.hh"
 #include "H264VideoStreamDiscreteFramer.hh"
 #include "H265VideoStreamDiscreteFramer.hh"
-#include "JPEGVideoRTPSink.hh"
 #include "SimpleRTPSink.hh"
 #include "uLawAudioFilter.hh"
 #include "MPEG2IndexFromTransportStream.hh"
@@ -64,8 +59,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "MP3ADURTPSource.hh"
 #include "QCELPAudioRTPSource.hh"
 #include "AMRAudioRTPSource.hh"
-#include "JPEGVideoRTPSource.hh"
-#include "JPEGVideoSource.hh"
 #include "MPEG1or2VideoRTPSource.hh"
 #include "VorbisAudioRTPSource.hh"
 #include "TheoraVideoRTPSource.hh"

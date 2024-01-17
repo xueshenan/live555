@@ -220,7 +220,6 @@ public:
       // (even) port number is chosen.)  This routine must *not* be
       // called after initiate().
   void receiveRawMP3ADUs() { fReceiveRawMP3ADUs = True; } // optional hack for audio/MPA-ROBUST; must not be called after initiate()
-  void receiveRawJPEGFrames() { fReceiveRawJPEGFrames = True; } // optional hack for video/JPEG; must not be called after initiate()
   char*& connectionEndpointName() { return fConnectionEndpointName; }
   char const* connectionEndpointName() const {
     return fConnectionEndpointName;
@@ -353,7 +352,7 @@ protected:
   Groupsock* fRTPSocket; Groupsock* fRTCPSocket; // works even for unicast
   RTPSource* fRTPSource; RTCPInstance* fRTCPInstance;
   FramedSource* fReadSource;
-  Boolean fReceiveRawMP3ADUs, fReceiveRawJPEGFrames;
+  Boolean fReceiveRawMP3ADUs;
 
   // Other fields:
   char* fSessionId; // used by RTSP

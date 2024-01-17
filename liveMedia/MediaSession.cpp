@@ -482,9 +482,7 @@ char* MediaSession::lookupPayloadFormat(unsigned char rtpPayloadType,
   case 17: {temp = "DVI4"; freq = 22050; nCh = 1; break;}
   case 18: {temp = "G729"; freq = 8000; nCh = 1; break;}
   case 25: {temp = "CELB"; freq = 90000; nCh = 1; break;}
-  case 26: {temp = "JPEG"; freq = 90000; nCh = 1; break;}
   case 28: {temp = "NV"; freq = 90000; nCh = 1; break;}
-  case 31: {temp = "H261"; freq = 90000; nCh = 1; break;}
   case 32: {temp = "MPV"; freq = 90000; nCh = 1; break;}
   case 33: {temp = "MP2T"; freq = 90000; nCh = 1; break;}
   case 34: {temp = "H263"; freq = 90000; nCh = 1; break;}
@@ -628,7 +626,7 @@ MediaSubsession::MediaSubsession(MediaSession& parent)
     fAttributeTable(HashTable::create(STRING_HASH_KEYS)),
     fRTPSocket(NULL), fRTCPSocket(NULL),
     fRTPSource(NULL), fRTCPInstance(NULL), fReadSource(NULL),
-    fReceiveRawMP3ADUs(False), fReceiveRawJPEGFrames(False),
+    fReceiveRawMP3ADUs(False),
     fSessionId(NULL) {
   rtpInfo.seqNum = 0; rtpInfo.timestamp = 0; rtpInfo.infoIsNew = False;
 
@@ -1368,33 +1366,10 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 					  expectDONFields,
 					  fRTPTimestampFrequency);
       } else if (strcmp(fCodecName, "DV") == 0) {
-	fReadSource = fRTPSource
-	  = DVVideoRTPSource::createNew(env(), fRTPSocket,
-					fRTPPayloadFormat,
-					fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "JPEG") == 0) { // motion JPEG
-	if (fReceiveRawJPEGFrames) {
-	  // Special case (used when proxying JPEG/RTP streams): Receive each JPEG/RTP packet, including the special RTP headers:
-	  fReadSource = fRTPSource
-	    = SimpleRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat,
-					 fRTPTimestampFrequency, "video/JPEG",
-					 0/*special offset*/, False/*doNormalMBitRule => ignore the 'M' bit*/);
-	} else {
-	  // Normal case: Receive each JPEG frame as a complete, displayable JPEG image:
-	  fReadSource = fRTPSource
-	    = JPEGVideoRTPSource::createNew(env(), fRTPSocket,
-					    fRTPPayloadFormat,
-					    fRTPTimestampFrequency,
-					    videoWidth(),
-					    videoHeight());
-	}
-      } else if (strcmp(fCodecName, "JPEG2000") == 0) { // JPEG 2000 video
-        fReadSource = fRTPSource
-          = JPEG2000VideoRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat,
-					      fRTPTimestampFrequency,
-					      attrVal_str("sampling"));
-      } else if (strcmp(fCodecName, "X-QT") == 0
-		 || strcmp(fCodecName, "X-QUICKTIME") == 0) {
+	          fReadSource = fRTPSource = DVVideoRTPSource::createNew(env(), fRTPSocket,
+					                                                        fRTPPayloadFormat,
+                                                                  fRTPTimestampFrequency);
+      } else if (strcmp(fCodecName, "X-QT") == 0 || strcmp(fCodecName, "X-QUICKTIME") == 0) {
 	// Generic QuickTime streams, as defined in
 	// <http://developer.apple.com/quicktime/icefloe/dispatch026.html>
 	char* mimeType
