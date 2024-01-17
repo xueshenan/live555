@@ -42,13 +42,15 @@ DynamicRTSPServer::~DynamicRTSPServer() {
 }
 
 static ServerMediaSession* createNewSMS(UsageEnvironment& env,
-					char const* fileName, FILE* fid); // forward
+					char const* fileName); // forward
 
 ServerMediaSession* DynamicRTSPServer
 ::lookupServerMediaSession(char const* streamName, Boolean isFirstLookupInSession) {
+  envir() << "require stream " << streamName << "\n";
   // First, check whether the specified "streamName" exists as a local file:
   FILE* fid = fopen(streamName, "rb");
   Boolean const fileExists = fid != NULL;
+  fclose(fid);
 
   // Next, check whether we already have a "ServerMediaSession" for this file:
   ServerMediaSession* sms = RTSPServer::lookupServerMediaSession(streamName);
@@ -63,20 +65,22 @@ ServerMediaSession* DynamicRTSPServer
     }
 
     return NULL;
-  } else {
+  } 
+  else {
     if (smsExists && isFirstLookupInSession) { 
       // Remove the existing "ServerMediaSession" and create a new one, in case the underlying
       // file has changed in some way:
+      envir() << "Remove the existing ServerMediaSession and create a new one\n";
       removeServerMediaSession(sms); 
       sms = NULL;
     } 
 
     if (sms == NULL) {
-      sms = createNewSMS(envir(), streamName, fid); 
+      sms = createNewSMS(envir(), streamName); 
       addServerMediaSession(sms);
     }
 
-    fclose(fid);
+
     return sms;
   }
 }
@@ -88,7 +92,7 @@ sms = ServerMediaSession::createNew(env, fileName, fileName, descStr);\
 } while(0)
 
 static ServerMediaSession* createNewSMS(UsageEnvironment& env,
-					char const* fileName, FILE* /*fid*/) {
+					char const* fileName) {
   // Use the file name extension to determine the type of "ServerMediaSession":
   char const* extension = strrchr(fileName, '.');
   if (extension == NULL) return NULL;
