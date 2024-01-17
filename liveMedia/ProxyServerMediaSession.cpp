@@ -715,13 +715,6 @@ RTPSink* ProxyServerMediaSubsession
 				       48000, "audio", "OPUS", 2, False/*only 1 Opus 'packet' in each RTP packet*/);
   } else if (strcmp(fCodecName, "T140") == 0) {
     newSink = T140TextRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
-  } else if (strcmp(fCodecName, "THEORA") == 0) {
-    newSink = TheoraVideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic,
-					    fClientMediaSubsession.fmtp_config()); 
-  } else if (strcmp(fCodecName, "VORBIS") == 0) {
-    newSink = VorbisAudioRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic,
-					    fClientMediaSubsession.rtpTimestampFrequency(), fClientMediaSubsession.numChannels(),
-					    fClientMediaSubsession.fmtp_config()); 
   } else if (strcmp(fCodecName, "VP8") == 0) {
     newSink = VP8VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
   } else if (strcmp(fCodecName, "VP9") == 0) {

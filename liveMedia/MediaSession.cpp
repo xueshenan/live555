@@ -1296,14 +1296,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 	  = MPEG4LATMAudioRTPSource::createNew(env(), fRTPSocket,
 					       fRTPPayloadFormat,
 					       fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "VORBIS") == 0) { // Vorbis audio
-	fReadSource = fRTPSource
-	  = VorbisAudioRTPSource::createNew(env(), fRTPSocket,
-					    fRTPPayloadFormat,
-					    fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "THEORA") == 0) { // Theora video
-	fReadSource = fRTPSource
-	  = TheoraVideoRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat);
       } else if (strcmp(fCodecName, "RAW") == 0) { // Uncompressed raw video (RFC 4175)
 	fReadSource = fRTPSource
 	  = RawVideoRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat, fRTPTimestampFrequency);
