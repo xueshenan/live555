@@ -578,10 +578,6 @@ FramedSource* ProxyServerMediaSubsession::createNewStreamSource(unsigned clientS
 	fClientMediaSubsession.addFilter(MPEG1or2VideoStreamDiscreteFramer
 					 ::createNew(envir(), fClientMediaSubsession.readSource(),
 						     False, 5.0, True/* leave PTs unmodified*/));
-      } else if (strcmp(fCodecName, "DV") == 0) {
-	fClientMediaSubsession.addFilter(DVVideoStreamFramer
-					 ::createNew(envir(), fClientMediaSubsession.readSource(),
-						     False, True/* leave PTs unmodified*/));
       }
     }
 
@@ -676,14 +672,6 @@ RTPSink* ProxyServerMediaSubsession
   if (strcmp(fCodecName, "AC3") == 0 || strcmp(fCodecName, "EAC3") == 0) {
     newSink = AC3AudioRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic,
 					 fClientMediaSubsession.rtpTimestampFrequency()); 
-#if 0 // This code does not work; do *not* enable it:
-  } else if (strcmp(fCodecName, "AMR") == 0 || strcmp(fCodecName, "AMR-WB") == 0) {
-    Boolean isWideband = strcmp(fCodecName, "AMR-WB") == 0;
-    newSink = AMRAudioRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic,
-					 isWideband, fClientMediaSubsession.numChannels());
-#endif
-  } else if (strcmp(fCodecName, "DV") == 0) {
-    newSink = DVVideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
   } else if (strcmp(fCodecName, "GSM") == 0) {
     newSink = GSMAudioRTPSink::createNew(envir(), rtpGroupsock);
   } else if (strcmp(fCodecName, "H263-1998") == 0 || strcmp(fCodecName, "H263-2000") == 0) {

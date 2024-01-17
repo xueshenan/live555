@@ -1365,10 +1365,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 					  fRTPPayloadFormat,
 					  expectDONFields,
 					  fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "DV") == 0) {
-	          fReadSource = fRTPSource = DVVideoRTPSource::createNew(env(), fRTPSocket,
-					                                                        fRTPPayloadFormat,
-                                                                  fRTPTimestampFrequency);
       } else if (strcmp(fCodecName, "X-QT") == 0 || strcmp(fCodecName, "X-QUICKTIME") == 0) {
 	// Generic QuickTime streams, as defined in
 	// <http://developer.apple.com/quicktime/icefloe/dispatch026.html>
