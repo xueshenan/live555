@@ -5,9 +5,7 @@ GROUPSOCK_DIR = groupsock
 USAGE_ENVIRONMENT_DIR = UsageEnvironment
 BASIC_USAGE_ENVIRONMENT_DIR = BasicUsageEnvironment
 
-MEDIA_SERVER_DIR = mediaServer
-
-PROXY_SERVER_DIR = proxyServer
+MEDIA_SERVER_DIR = rockchipServer
 
 all:
 	cd $(LIVEMEDIA_DIR) ; $(MAKE)
@@ -15,7 +13,6 @@ all:
 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE)
 	cd $(BASIC_USAGE_ENVIRONMENT_DIR) ; $(MAKE)
 	cd $(MEDIA_SERVER_DIR) ; $(MAKE)
-	cd $(PROXY_SERVER_DIR) ; $(MAKE)
 	@echo
 	@echo "For more information about this source code (including your obligations under the LGPL), please see our FAQ at http://live555.com/liveMedia/faq.html"
 
@@ -25,7 +22,6 @@ install:
 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE) install
 	cd $(BASIC_USAGE_ENVIRONMENT_DIR) ; $(MAKE) install
 	cd $(MEDIA_SERVER_DIR) ; $(MAKE) install
-	cd $(PROXY_SERVER_DIR) ; $(MAKE) install
 
 clean:
 	cd $(LIVEMEDIA_DIR) ; $(MAKE) clean
@@ -33,12 +29,10 @@ clean:
 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE) clean
 	cd $(BASIC_USAGE_ENVIRONMENT_DIR) ; $(MAKE) clean
 	cd $(MEDIA_SERVER_DIR) ; $(MAKE) clean
-	cd $(PROXY_SERVER_DIR) ; $(MAKE) clean
 
 distclean: clean
 	-rm -f $(LIVEMEDIA_DIR)/Makefile $(GROUPSOCK_DIR)/Makefile \
 	  $(USAGE_ENVIRONMENT_DIR)/Makefile \
 	  $(BASIC_USAGE_ENVIRONMENT_DIR)/Makefile \
 	  $(MEDIA_SERVER_DIR)/Makefile \
-	  $(PROXY_SERVER_DIR)/Makefile \
 	  Makefile

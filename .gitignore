@@ -1,0 +1,7 @@
+# vscode settings
+.vscode
+
+# gnu make gengerate file
+*.o
+*.a
+Makefile
