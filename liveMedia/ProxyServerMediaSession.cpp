@@ -574,10 +574,6 @@ FramedSource* ProxyServerMediaSubsession::createNewStreamSource(unsigned clientS
 	fClientMediaSubsession.addFilter(MPEG4VideoStreamDiscreteFramer
 					 ::createNew(envir(), fClientMediaSubsession.readSource(),
 						     True/* leave PTs unmodified*/));
-      } else if (strcmp(fCodecName, "MPV") == 0) {
-	fClientMediaSubsession.addFilter(MPEG1or2VideoStreamDiscreteFramer
-					 ::createNew(envir(), fClientMediaSubsession.readSource(),
-						     False, 5.0, True/* leave PTs unmodified*/));
       }
     }
 
@@ -692,19 +688,13 @@ RTPSink* ProxyServerMediaSubsession
 					     fClientMediaSubsession.rtpTimestampFrequency(),
 					     fClientMediaSubsession.attrVal_unsigned("profile-level-id"),
 					     fClientMediaSubsession.fmtp_config()); 
-  } else if (strcmp(fCodecName, "MPA") == 0) {
-    newSink = MPEG1or2AudioRTPSink::createNew(envir(), rtpGroupsock);
-  } else if (strcmp(fCodecName, "MPA-ROBUST") == 0) {
-    newSink = MP3ADURTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
   } else if (strcmp(fCodecName, "MPEG4-GENERIC") == 0) {
     newSink = MPEG4GenericRTPSink::createNew(envir(), rtpGroupsock,
 					     rtpPayloadTypeIfDynamic, fClientMediaSubsession.rtpTimestampFrequency(),
 					     fClientMediaSubsession.mediumName(),
 					     fClientMediaSubsession.attrVal_str("mode"),
 					     fClientMediaSubsession.fmtp_config(), fClientMediaSubsession.numChannels());
-  } else if (strcmp(fCodecName, "MPV") == 0) {
-    newSink = MPEG1or2VideoRTPSink::createNew(envir(), rtpGroupsock);
-  }  else if (strcmp(fCodecName, "T140") == 0) {
+  } else if (strcmp(fCodecName, "T140") == 0) {
     newSink = T140TextRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
   } else if (strcmp(fCodecName, "VP8") == 0) {
     newSink = VP8VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);

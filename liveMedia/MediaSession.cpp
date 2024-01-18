@@ -1216,18 +1216,14 @@ Boolean MediaSubsession::parseSDPAttribute_key_mgmt(char const* sdpLine) {
   return True;
 }
 
-Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
+Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) 
+{
   do {
     // First, check "fProtocolName"
     if (strcmp(fProtocolName, "UDP") == 0) {
       // A UDP-packetized stream (*not* a RTP stream)
       fReadSource = BasicUDPSource::createNew(env(), fRTPSocket);
       fRTPSource = NULL; // Note!
-      
-      if (strcmp(fCodecName, "MP2T") == 0) { // MPEG-2 Transport Stream
-	fReadSource = MPEG2TransportStreamFramer::createNew(env(), fReadSource);
-	// this sets "durationInMicroseconds" correctly, based on the PCR values
-      }
     } else {
       // Check "fCodecName" against the set of codecs that we support,
       // and create our RTP source accordingly
@@ -1241,39 +1237,7 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 					 fRTPPayloadFormat,
 					 fRTPTimestampFrequency);
 	// Note that fReadSource will differ from fRTPSource in this case
-      } else if (strcmp(fCodecName, "MPA") == 0) { // MPEG-1 or 2 audio
-	fReadSource = fRTPSource
-	  = MPEG1or2AudioRTPSource::createNew(env(), fRTPSocket,
-					      fRTPPayloadFormat,
-					      fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "MPA-ROBUST") == 0) { // robust MP3 audio
-	fReadSource = fRTPSource
-	  = MP3ADURTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat,
-				       fRTPTimestampFrequency);
-	if (fRTPSource == NULL) break;
-	
-	if (!fReceiveRawMP3ADUs) {
-	  // Add a filter that deinterleaves the ADUs after depacketizing them:
-	  MP3ADUdeinterleaver* deinterleaver
-	    = MP3ADUdeinterleaver::createNew(env(), fRTPSource);
-	  if (deinterleaver == NULL) break;
-	
-	  // Add another filter that converts these ADUs to MP3 frames:
-	  fReadSource = MP3FromADUSource::createNew(env(), deinterleaver);
-	}
-      } else if (strcmp(fCodecName, "X-MP3-DRAFT-00") == 0) {
-	// a non-standard variant of "MPA-ROBUST" used by RealNetworks
-	// (one 'ADU'ized MP3 frame per packet; no headers)
-	fRTPSource
-	  = SimpleRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat,
-				       fRTPTimestampFrequency,
-				       "audio/MPA-ROBUST" /*hack*/);
-	if (fRTPSource == NULL) break;
-	
-	// Add a filter that converts these ADUs to MP3 frames:
-	fReadSource = MP3FromADUSource::createNew(env(), fRTPSource,
-						  False /*no ADU header*/);
-       } else if (strcmp(fCodecName, "MP4A-LATM") == 0) { // MPEG-4 LATM audio
+      } else if (strcmp(fCodecName, "MP4A-LATM") == 0) { // MPEG-4 LATM audio
 	fReadSource = fRTPSource
 	  = MPEG4LATMAudioRTPSource::createNew(env(), fRTPSocket,
 					       fRTPPayloadFormat,
@@ -1310,17 +1274,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset) {
 					     attrVal_unsigned("sizelength"),
 					     attrVal_unsigned("indexlength"),
 					     attrVal_unsigned("indexdeltalength"));
-      } else if (strcmp(fCodecName, "MPV") == 0) { // MPEG-1 or 2 video
-	fReadSource = fRTPSource
-	  = MPEG1or2VideoRTPSource::createNew(env(), fRTPSocket,
-					      fRTPPayloadFormat,
-					      fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "MP2T") == 0) { // MPEG-2 Transport Stream
-	fRTPSource = SimpleRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat,
-						fRTPTimestampFrequency, "video/MP2T",
-						0, False);
-	fReadSource = MPEG2TransportStreamFramer::createNew(env(), fRTPSource);
-	// this sets "durationInMicroseconds" correctly, based on the PCR values
       } else if (strcmp(fCodecName, "H264") == 0) {
 	fReadSource = fRTPSource
 	  = H264VideoRTPSource::createNew(env(), fRTPSocket,
