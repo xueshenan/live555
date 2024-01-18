@@ -65,7 +65,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "MPEG4VideoFileServerMediaSubsession.hh"
 #include "H264VideoFileServerMediaSubsession.hh"
 #include "H265VideoFileServerMediaSubsession.hh"
-#include "T140TextRTPSink.hh"
 #include "AC3AudioFileServerMediaSubsession.hh"
 #include "ProxyServerMediaSession.hh"
 
