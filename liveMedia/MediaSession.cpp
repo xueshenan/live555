@@ -1245,16 +1245,6 @@ Boolean MediaSubsession::createSourceObjects(int useSpecialRTPoffset)
       } else if (strcmp(fCodecName, "RAW") == 0) { // Uncompressed raw video (RFC 4175)
 	fReadSource = fRTPSource
 	  = RawVideoRTPSource::createNew(env(), fRTPSocket, fRTPPayloadFormat, fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "VP8") == 0) { // VP8 video
-	fReadSource = fRTPSource
-	  = VP8VideoRTPSource::createNew(env(), fRTPSocket,
-					 fRTPPayloadFormat,
-					 fRTPTimestampFrequency);
-      } else if (strcmp(fCodecName, "VP9") == 0) { // VP9 video
-	fReadSource = fRTPSource
-	  = VP9VideoRTPSource::createNew(env(), fRTPSocket,
-					 fRTPPayloadFormat,
-					 fRTPTimestampFrequency);
       } else if (strcmp(fCodecName, "AC3") == 0 || strcmp(fCodecName, "EAC3") == 0) { // AC3 audio
 	fReadSource = fRTPSource
 	  = AC3AudioRTPSource::createNew(env(), fRTPSocket,

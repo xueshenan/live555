@@ -696,10 +696,6 @@ RTPSink* ProxyServerMediaSubsession
 					     fClientMediaSubsession.fmtp_config(), fClientMediaSubsession.numChannels());
   } else if (strcmp(fCodecName, "T140") == 0) {
     newSink = T140TextRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
-  } else if (strcmp(fCodecName, "VP8") == 0) {
-    newSink = VP8VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
-  } else if (strcmp(fCodecName, "VP9") == 0) {
-    newSink = VP9VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
   } else if (strcmp(fCodecName, "QCELP") == 0 ||
 	     strcmp(fCodecName, "H261") == 0 ||
 	     strcmp(fCodecName, "H263-1998") == 0 || strcmp(fCodecName, "H263-2000") == 0 ||
