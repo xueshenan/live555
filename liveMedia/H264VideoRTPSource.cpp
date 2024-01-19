@@ -62,12 +62,18 @@ H264VideoRTPSource
 H264VideoRTPSource::~H264VideoRTPSource() {
 }
 
+void H264VideoRTPSource::doGetNextFrame() {
+  printf("call do next frame\n");
+}
+
 Boolean H264VideoRTPSource
 ::processSpecialHeader(BufferedPacket* packet,
                        unsigned& resultSpecialHeaderSize) {
   unsigned char* headerStart = packet->data();
   unsigned packetSize = packet->dataSize();
   unsigned numBytesToSkip;
+
+  printf("H264VideoRTPSource package size : %d\n", packetSize);
 
   // Check the 'nal_unit_type' for special 'aggregation' or 'fragmentation' packets:
   if (packetSize < 1) return False;

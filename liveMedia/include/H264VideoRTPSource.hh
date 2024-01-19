@@ -45,6 +45,9 @@ protected:
   virtual Boolean processSpecialHeader(BufferedPacket* packet,
                                        unsigned& resultSpecialHeaderSize);
   virtual char const* MIMEtype() const;
+  
+  // redefined virtual functions:
+  virtual void doGetNextFrame();
 
 private:
   friend class H264BufferedPacket;

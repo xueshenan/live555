@@ -25,21 +25,19 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "RTSPServer.hh"
 #endif
 
-class DynamicRTSPServer: public RTSPServer {
+class DynamicRTSPServer : public RTSPServer {
 public:
-  static DynamicRTSPServer* createNew(UsageEnvironment& env, Port ourPort,
-				      UserAuthenticationDatabase* authDatabase,
-				      unsigned reclamationTestSeconds = 65);
-
+    static DynamicRTSPServer *createNew(UsageEnvironment &env, Port ourPort,
+                                        UserAuthenticationDatabase *authDatabase,
+                                        unsigned reclamationTestSeconds = 65);
 protected:
-  DynamicRTSPServer(UsageEnvironment& env, int ourSocket, Port ourPort,
-		    UserAuthenticationDatabase* authDatabase, unsigned reclamationTestSeconds);
-  // called only by createNew();
-  virtual ~DynamicRTSPServer();
-
-protected: // redefined virtual functions
-  virtual ServerMediaSession*
-  lookupServerMediaSession(char const* streamName, Boolean isFirstLookupInSession);
+    DynamicRTSPServer(UsageEnvironment &env, int ourSocket, Port ourPort,
+                      UserAuthenticationDatabase *authDatabase, unsigned reclamationTestSeconds);
+    // called only by createNew();
+    virtual ~DynamicRTSPServer();
+protected:  // redefined virtual functions
+    virtual ServerMediaSession *lookupServerMediaSession(char const *streamName,
+                                                         Boolean isFirstLookupInSession);
 };
 
 #endif
