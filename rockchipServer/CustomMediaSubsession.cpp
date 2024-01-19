@@ -22,6 +22,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "CustomMediaSubsession.hh"
 
 #include "FramedSource.hh"
+#include "GroupsockHelper.hh"
 #include "H264VideoRTPSink.hh"
 #include "H264VideoRTPSource.hh"
 
@@ -120,8 +121,15 @@ OnDemandServerMediaSubsession *CustomMediaSubsession::createNew(
 
 CustomMediaSubsession::CustomMediaSubsession(UsageEnvironment &env, Boolean reuseFirstSource)
     : OnDemandServerMediaSubsession(env, reuseFirstSource) {
-    struct sockaddr_storage tempAddr = nullAddress();
-    _RTPgs = new Groupsock(envir(), tempAddr, nullAddress(), 5600);
+    // Create 'groupsocks' for RTP and RTCP:
+    struct sockaddr_storage destinationAddress;
+    destinationAddress.ss_family = AF_INET;
+    ((struct sockaddr_in &)destinationAddress).sin_addr.s_addr = ourIPAddress(env);
+
+    const unsigned short rtpPortNum = 5600;
+    const Port rtpPort(rtpPortNum);
+    const unsigned char ttl = 255;
+    _rtpGroupsock = new Groupsock(envir(), nullAddress(), rtpPort, ttl);
 }
 
 //创建调用CustomFramedSource创建自定义的FramedSource
@@ -133,7 +141,7 @@ FramedSource *CustomMediaSubsession::createNewStreamSource(unsigned clientSessio
     // if (fileSource == NULL) return NULL;
 
     // Create a framer for the Video Elementary Stream:
-    return H264VideoRTPSource::createNew(envir(), _RTPgs, 96);
+    return H264VideoRTPSource::createNew(envir(), _rtpGroupsock, 96);
     //return H264VideoStreamFramer::createNew(envir(), fileSource);
 }
 
@@ -141,5 +149,6 @@ FramedSource *CustomMediaSubsession::createNewStreamSource(unsigned clientSessio
 RTPSink *CustomMediaSubsession::createNewRTPSink(Groupsock *rtpGroupsock,
                                                  unsigned char rtpPayloadTypeIfDynamic,
                                                  FramedSource *inputSource) {
-    return H264VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
+    printf("H264VideoRTPSink port:%d\n", rtpGroupsock->port().num());
+    return H264VideoRTPSink::createNew(envir(), rtpGroupsock, 96);
 }

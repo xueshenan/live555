@@ -8,3 +8,4 @@ Makefile
 
 #special out file
 live555MediaServer
+live555ProxyServer

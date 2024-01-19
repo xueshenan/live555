@@ -25,58 +25,52 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "NetAddress.hh"
 #endif
 
-int setupDatagramSocket(UsageEnvironment& env, Port port);
-int setupStreamSocket(UsageEnvironment& env,
-		      Port port, Boolean makeNonBlocking = True, Boolean setKeepAlive = False);
+int setupDatagramSocket(UsageEnvironment &env, Port port);
+int setupStreamSocket(UsageEnvironment &env, Port port, Boolean makeNonBlocking = True,
+                      Boolean setKeepAlive = False);
 
-int readSocket(UsageEnvironment& env,
-	       int socket, unsigned char* buffer, unsigned bufferSize,
-	       struct sockaddr_storage& fromAddress);
+int readSocket(UsageEnvironment &env, int socket, unsigned char *buffer, unsigned bufferSize,
+               struct sockaddr_storage &fromAddress);
 
-Boolean writeSocket(UsageEnvironment& env,
-		    int socket, struct sockaddr_storage const& addressAndPort,
-		    u_int8_t ttlArg,
-		    unsigned char* buffer, unsigned bufferSize);
+Boolean writeSocket(UsageEnvironment &env, int socket,
+                    struct sockaddr_storage const &addressAndPort, u_int8_t ttlArg,
+                    unsigned char *buffer, unsigned bufferSize);
 
-Boolean writeSocket(UsageEnvironment& env,
-		    int socket, struct sockaddr_storage const& addressAndPort,
-		    unsigned char* buffer, unsigned bufferSize);
-    // An optimized version of "writeSocket" that omits the "setsockopt()" call to set the TTL.
+Boolean writeSocket(UsageEnvironment &env, int socket,
+                    struct sockaddr_storage const &addressAndPort, unsigned char *buffer,
+                    unsigned bufferSize);
+// An optimized version of "writeSocket" that omits the "setsockopt()" call to set the TTL.
 
 void ignoreSigPipeOnSocket(int socketNum);
 
-unsigned getSendBufferSize(UsageEnvironment& env, int socket);
-unsigned getReceiveBufferSize(UsageEnvironment& env, int socket);
-unsigned setSendBufferTo(UsageEnvironment& env,
-			 int socket, unsigned requestedSize);
-unsigned setReceiveBufferTo(UsageEnvironment& env,
-			    int socket, unsigned requestedSize);
-unsigned increaseSendBufferTo(UsageEnvironment& env,
-			      int socket, unsigned requestedSize);
-unsigned increaseReceiveBufferTo(UsageEnvironment& env,
-				 int socket, unsigned requestedSize);
+unsigned getSendBufferSize(UsageEnvironment &env, int socket);
+unsigned getReceiveBufferSize(UsageEnvironment &env, int socket);
+unsigned setSendBufferTo(UsageEnvironment &env, int socket, unsigned requestedSize);
+unsigned setReceiveBufferTo(UsageEnvironment &env, int socket, unsigned requestedSize);
+unsigned increaseSendBufferTo(UsageEnvironment &env, int socket, unsigned requestedSize);
+unsigned increaseReceiveBufferTo(UsageEnvironment &env, int socket, unsigned requestedSize);
 
 Boolean makeSocketNonBlocking(int sock);
 Boolean makeSocketBlocking(int sock, unsigned writeTimeoutInMilliseconds = 0);
-  // A "writeTimeoutInMilliseconds" value of 0 means: Don't timeout
+// A "writeTimeoutInMilliseconds" value of 0 means: Don't timeout
 Boolean setSocketKeepAlive(int sock);
 
-Boolean socketJoinGroup(UsageEnvironment& env, int socket,
-			struct sockaddr_storage const& groupAddress);
-Boolean socketLeaveGroup(UsageEnvironment&, int socket,
-			 struct sockaddr_storage const& groupAddress);
+Boolean socketJoinGroup(UsageEnvironment &env, int socket,
+                        struct sockaddr_storage const &groupAddress);
+Boolean socketLeaveGroup(UsageEnvironment &, int socket,
+                         struct sockaddr_storage const &groupAddress);
 
 // source-specific multicast join/leave
-Boolean socketJoinGroupSSM(UsageEnvironment& env, int socket,
-			   struct sockaddr_storage const& groupAddress,
-			   struct sockaddr_storage const& sourceFilterAddr);
-Boolean socketLeaveGroupSSM(UsageEnvironment&, int socket,
-			    struct sockaddr_storage const& groupAddress,
-			    struct sockaddr_storage const& sourceFilterAddr);
+Boolean socketJoinGroupSSM(UsageEnvironment &env, int socket,
+                           struct sockaddr_storage const &groupAddress,
+                           struct sockaddr_storage const &sourceFilterAddr);
+Boolean socketLeaveGroupSSM(UsageEnvironment &, int socket,
+                            struct sockaddr_storage const &groupAddress,
+                            struct sockaddr_storage const &sourceFilterAddr);
 
-Boolean getSourcePort(UsageEnvironment& env, int socket, Port& port);
+Boolean getSourcePort(UsageEnvironment &env, int socket, Port &port);
 
-netAddressBits ourIPAddress(UsageEnvironment& env); // in network order
+netAddressBits ourIPAddress(UsageEnvironment &env);  // in network order
 
 // IP addresses of our sending and receiving interfaces.  (By default, these
 // are INADDR_ANY (i.e., 0), specifying the default interface.)
@@ -84,11 +78,10 @@ extern netAddressBits SendingInterfaceAddr;
 extern netAddressBits ReceivingInterfaceAddr;
 
 // Allocates a randomly-chosen IPv4 SSM (multicast) address:
-ipv4AddressBits chooseRandomIPv4SSMAddress(UsageEnvironment& env);
+ipv4AddressBits chooseRandomIPv4SSMAddress(UsageEnvironment &env);
 
 // Returns a simple "hh:mm:ss" string, for use in debugging output (e.g.)
-char const* timestampString();
-
+char const *timestampString();
 
 #ifdef HAVE_SOCKADDR_LEN
 #define SET_SOCKADDR_SIN_LEN(var) var.sin_len = sizeof var
@@ -96,13 +89,12 @@ char const* timestampString();
 #define SET_SOCKADDR_SIN_LEN(var)
 #endif
 
-#define MAKE_SOCKADDR_IN(var,adr,prt) /*adr,prt must be in network order*/\
-    struct sockaddr_in var;\
-    var.sin_family = AF_INET;\
-    var.sin_addr.s_addr = (adr);\
-    var.sin_port = (prt);\
+#define MAKE_SOCKADDR_IN(var, adr, prt) /*adr,prt must be in network order*/ \
+    struct sockaddr_in var;                                                  \
+    var.sin_family = AF_INET;                                                \
+    var.sin_addr.s_addr = (adr);                                             \
+    var.sin_port = (prt);                                                    \
     SET_SOCKADDR_SIN_LEN(var);
-
 
 // By default, we create sockets with the SO_REUSE_* flag set.
 // If, instead, you want to create sockets without the SO_REUSE_* flags,
@@ -113,27 +105,24 @@ char const* timestampString();
 //          }
 class NoReuse {
 public:
-  NoReuse(UsageEnvironment& env);
-  ~NoReuse();
-
+    NoReuse(UsageEnvironment &env);
+    ~NoReuse();
 private:
-  UsageEnvironment& fEnv;
+    UsageEnvironment &fEnv;
 };
-
 
 // Define the "UsageEnvironment"-specific "groupsockPriv" structure:
 
-struct _groupsockPriv { // There should be only one of these allocated
-  HashTable* socketTable;
-  int reuseFlag;
+struct _groupsockPriv {  // There should be only one of these allocated
+    HashTable *socketTable;
+    int reuseFlag;
 };
-_groupsockPriv* groupsockPriv(UsageEnvironment& env); // allocates it if necessary
-void reclaimGroupsockPriv(UsageEnvironment& env);
-
+_groupsockPriv *groupsockPriv(UsageEnvironment &env);  // allocates it if necessary
+void reclaimGroupsockPriv(UsageEnvironment &env);
 
 #if (defined(__WIN32__) || defined(_WIN32)) && !defined(__MINGW32__)
 // For Windoze, we need to implement our own gettimeofday()
-extern int gettimeofday(struct timeval*, int*);
+extern int gettimeofday(struct timeval *, int *);
 #else
 #include <sys/time.h>
 #endif
@@ -141,6 +130,6 @@ extern int gettimeofday(struct timeval*, int*);
 // The following are implemented in inet.c:
 extern "C" void our_srandom(int x);
 extern "C" long our_random();
-extern "C" u_int32_t our_random32(); // because "our_random()" returns a 31-bit number
+extern "C" u_int32_t our_random32();  // because "our_random()" returns a 31-bit number
 
 #endif

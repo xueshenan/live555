@@ -37,7 +37,7 @@ protected:
                                       unsigned char rtpPayloadTypeIfDynamic,
                                       FramedSource *inputSource);
 protected:
-    Groupsock *_RTPgs;
+    Groupsock *_rtpGroupsock;
 };
 
 #endif
