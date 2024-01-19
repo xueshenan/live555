@@ -29,15 +29,14 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "OnDemandServerMediaSubsession.hh"
 #endif
 
-class FileServerMediaSubsession: public OnDemandServerMediaSubsession {
-protected: // we're a virtual base class
-  FileServerMediaSubsession(UsageEnvironment& env, char const* fileName,
-			    Boolean reuseFirstSource);
-  virtual ~FileServerMediaSubsession();
-
+class FileServerMediaSubsession : public OnDemandServerMediaSubsession {
+protected:  // we're a virtual base class
+    FileServerMediaSubsession(UsageEnvironment &env, char const *fileName,
+                              Boolean reuseFirstSource);
+    virtual ~FileServerMediaSubsession();
 protected:
-  char const* fFileName;
-  u_int64_t fFileSize; // if known
+    char const *fFileName;
+    u_int64_t fFileSize;  // if known
 };
 
 #endif

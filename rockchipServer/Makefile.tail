@@ -10,10 +10,11 @@ all: $(ALL)
 .$(CPP).$(OBJ):
 	$(CPLUSPLUS_COMPILER) -c $(CPLUSPLUS_FLAGS) $<
 
-MEDIA_SERVER_OBJS = live555MediaServer.$(OBJ) DynamicRTSPServer.$(OBJ)
+MEDIA_SERVER_OBJS = live555MediaServer.$(OBJ) DynamicRTSPServer.$(OBJ) CustomMediaSubsession.$(OBJ)
 
 live555MediaServer.$(CPP):	DynamicRTSPServer.hh version.hh
 DynamicRTSPServer.$(CPP):	DynamicRTSPServer.hh CustomMediaSubsession.hh
+CustomMediaSubsession.$(CPP) : CustomMediaSubsession.hh
 
 USAGE_ENVIRONMENT_DIR = ../UsageEnvironment
 USAGE_ENVIRONMENT_LIB = $(USAGE_ENVIRONMENT_DIR)/libUsageEnvironment.$(libUsageEnvironment_LIB_SUFFIX)
