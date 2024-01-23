@@ -134,7 +134,12 @@ void MultiFramedRTPSource::doGetNextFrame1() {
         Boolean packetLossPrecededThis;
         BufferedPacket *nextPacket =
             fReorderingBuffer->getNextCompletedPacket(packetLossPrecededThis);
-        if (nextPacket == NULL) break;
+        if (nextPacket == NULL) {
+            printf("not found next package\n");
+            break;
+        }
+
+        printf("got next package :%d\n", nextPacket->dataSize());
 
         fNeedDelivery = False;
 
@@ -341,7 +346,6 @@ void MultiFramedRTPSource::networkReadHandler1() {
         bPacket->assignMiscParams(rtpSeqNo, rtpTimestamp, presentationTime, hasBeenSyncedUsingRTCP,
                                   rtpMarkerBit, timeNow);
         if (!fReorderingBuffer->storePacket(bPacket)) break;
-
         readSuccess = True;
     } while (0);
     if (!readSuccess) fReorderingBuffer->freePacket(bPacket);
@@ -404,7 +408,6 @@ Boolean BufferedPacket::fillInData(RTPInterface &rtpInterface, struct sockaddr_s
                                  tcpSocketNum, tcpStreamChannelId, packetReadWasIncomplete)) {
         return False;
     }
-    printf("num bytes read add %d\n", numBytesRead);
     fTail += numBytesRead;
     return True;
 }

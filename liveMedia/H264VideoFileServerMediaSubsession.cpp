@@ -119,6 +119,5 @@ FramedSource *H264VideoFileServerMediaSubsession::createNewStreamSource(
 RTPSink *H264VideoFileServerMediaSubsession ::createNewRTPSink(
     Groupsock *rtpGroupsock, unsigned char rtpPayloadTypeIfDynamic,
     FramedSource * /*inputSource*/) {
-    printf("H264VideoFileServerMediaSubsession port:%d\n", rtpGroupsock->port());
     return H264VideoRTPSink::createNew(envir(), rtpGroupsock, rtpPayloadTypeIfDynamic);
 }

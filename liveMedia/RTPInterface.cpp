@@ -146,6 +146,7 @@ RTPInterface::RTPInterface(Medium *owner, Groupsock *gs)
     // (This can supposedly happen if the UDP checksum fails, for example.)
     makeSocketNonBlocking(fGS->socketNum());
     increaseSendBufferTo(envir(), fGS->socketNum(), 50 * 1024);
+    envir() << "create new RTPInterface with port " << fGS->port() << "\n";
 }
 
 RTPInterface::~RTPInterface() {
@@ -252,6 +253,7 @@ Boolean RTPInterface::sendPacket(unsigned char *packet, unsigned packetSize) {
 
 void RTPInterface ::startNetworkReading(TaskScheduler::BackgroundHandlerProc *handlerProc) {
     // Normal case: Arrange to read UDP packets:
+    envir() << "call startNetworkReading " << fGS->port() << "\n";
     envir().taskScheduler().turnOnBackgroundReadHandling(fGS->socketNum(), handlerProc, fOwner);
 
     // Also, receive RTP over TCP, on each of our TCP connections:
@@ -270,7 +272,8 @@ Boolean RTPInterface::handleRead(unsigned char *buffer, unsigned bufferMaxSize, 
                                  struct sockaddr_storage &fromAddress, int &tcpSocketNum,
                                  unsigned char &tcpStreamChannelId,
                                  Boolean &packetReadWasIncomplete) {
-    printf("before call handle rtp interface read %d\n", bytesRead);
+    // envir() << "before call handle rtp interface read port : " << fGS->port()
+    //         << " read byte:" << bytesRead << "\n";
     packetReadWasIncomplete = False;  // by default
     Boolean readSuccess;
     if (fNextTCPReadStreamSocketNum < 0) {
@@ -313,7 +316,7 @@ Boolean RTPInterface::handleRead(unsigned char *buffer, unsigned bufferMaxSize, 
         // Also pass the newly-read packet data to our auxilliary handler:
         (*fAuxReadHandlerFunc)(fAuxReadHandlerClientData, buffer, bytesRead);
     }
-    printf("end call handle rtp interface read %d\n", bytesRead);
+    // printf("end call handle rtp interface read %d\n", bytesRead);
     return readSuccess;
 }
 
@@ -528,7 +531,6 @@ Boolean SocketDescriptor::tcpReadHandler1(int mask) {
     //   a 2-byte packet size (in network byte order)
     //   the packet data.
     // However, because the socket is being read asynchronously, this data might arrive in pieces.
-
     u_int8_t c;
     struct sockaddr_storage fromAddress;
     if (fTCPReadingState != AWAITING_PACKET_DATA) {
