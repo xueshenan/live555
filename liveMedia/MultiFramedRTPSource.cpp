@@ -135,11 +135,11 @@ void MultiFramedRTPSource::doGetNextFrame1() {
         BufferedPacket *nextPacket =
             fReorderingBuffer->getNextCompletedPacket(packetLossPrecededThis);
         if (nextPacket == NULL) {
-            printf("not found next package\n");
+            // printf("not found next package\n");
             break;
         }
 
-        printf("got next package :%d\n", nextPacket->dataSize());
+        // printf("got next package :%d\n", nextPacket->dataSize());
 
         fNeedDelivery = False;
 

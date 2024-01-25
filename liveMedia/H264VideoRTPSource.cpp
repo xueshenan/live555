@@ -64,8 +64,8 @@ Boolean H264VideoRTPSource ::processSpecialHeader(BufferedPacket *packet,
     // Check the 'nal_unit_type' for special 'aggregation' or 'fragmentation' packets:
     if (packetSize < 1) return False;
     fCurPacketNALUnitType = (headerStart[0] & 0x1F);
-    printf("H264VideoRTPSource package size : %d, nalu type:%d\n", packetSize,
-           fCurPacketNALUnitType);
+    // printf("H264VideoRTPSource package size : %d, nalu type:%d\n", packetSize,
+    //        fCurPacketNALUnitType);
     switch (fCurPacketNALUnitType) {
         case 24: {               // STAP-A
             numBytesToSkip = 1;  // discard the type byte

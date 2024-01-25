@@ -114,6 +114,7 @@ void H264or5VideoStreamDiscreteFramer::doGetNextFrame() {
         // Arrange to read data (which should be a complete H.264 or H.265 NAL unit)
         // from our data source, directly into the client's input buffer.
         // After reading this, we'll do some parsing on the frame.
+        // printf("call get next frame\n");
         fInputSource->getNextFrame(fTo, fMaxSize, afterGettingFrame, this,
                                    FramedSource::handleClosure, this);
     }
@@ -127,6 +128,8 @@ void H264or5VideoStreamDiscreteFramer ::afterGettingFrame(void *clientData, unsi
     source->afterGettingFrame1(frameSize, numTruncatedBytes, presentationTime,
                                durationInMicroseconds);
 }
+
+// static FILE *fp = NULL;
 
 void H264or5VideoStreamDiscreteFramer ::afterGettingFrame1(unsigned frameSize,
                                                            unsigned numTruncatedBytes,
@@ -148,13 +151,26 @@ void H264or5VideoStreamDiscreteFramer ::afterGettingFrame1(unsigned frameSize,
     // *not* data that consists of discrete NAL units.)
     // Once again, to be clear: The NAL units that you feed to a "H264or5VideoStreamDiscreteFramer"
     // MUST NOT include start codes.
-    static int save_to_file = 0;
-    if (save_to_file == 1) {
-        printf("frame size:%d, nalu type:%d\n", frameSize, nal_unit_type);
-        FILE *fp = fopen("out.264", "ab");
-        fwrite(fTo, fFrameSize, 1, fp);
-        fclose(fp);
-    }
+    // if (fp == NULL) {
+    //     fp = fopen("out.264", "wb");
+    // }
+    // printf("frame size:%d, nalu type:%d\n", frameSize, nal_unit_type);
+    // static int save_to_file = 1;
+    // static int ss_count = 0;
+    // char header[4] = {0x00, 0x00, 0x00, 0x01};
+    // if (save_to_file == 1 && frameSize >= 4) {
+    //     if (fTo[0] == 0 && fTo[1] == 0 && fTo[2] == 0 && fTo[3] == 1) {
+    //         fwrite(fTo, fFrameSize, 1, fp);
+    //     } else {
+    //         fwrite(header, 4, 1, fp);
+    //         fwrite(fTo, fFrameSize, 1, fp);
+    //     }
+    //     ss_count++;
+    // }
+    // if (ss_count == 6) {
+    //     // fclose(fp);
+    //     save_to_file = false;
+    // }
 
     if (frameSize >= 4 && fTo[0] == 0 && fTo[1] == 0 &&
         ((fTo[2] == 0 && fTo[3] == 1) || fTo[2] == 1)) {
